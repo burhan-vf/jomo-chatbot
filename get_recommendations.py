@@ -4,7 +4,6 @@ from langchain.vectorstores import Pinecone
 import os
 from dotenv import load_dotenv
 import re
-import json
 
 load_dotenv()
 
@@ -14,27 +13,29 @@ PINECONE_API_KEY = os.getenv("PINECONE_API_KEY")
 PINECONE_ENV = os.getenv("PINECONE_ENV")
 PINECONE_INDEX_NAME = os.getenv("PINECONE_INDEX_NAME")
 
+def get_index():
+    embeddings = OpenAIEmbeddings(
+        model=MODEL_NAME,
+        openai_api_key=OPENAI_API_KEY
+    )
 
-embeddings = OpenAIEmbeddings(
-    model=MODEL_NAME,
-    openai_api_key=OPENAI_API_KEY
-)
+    # initialize pinecone
+    pinecone.init(
+        api_key=PINECONE_API_KEY,  # find at app.pinecone.io
+        environment=PINECONE_ENV,  # next to api key in console
+    )
 
-# initialize pinecone
-pinecone.init(
-    api_key=PINECONE_API_KEY,  # find at app.pinecone.io
-    environment=PINECONE_ENV,  # next to api key in console
-)
+    index_name = PINECONE_INDEX_NAME
 
-index_name = PINECONE_INDEX_NAME
-
-docsearch = Pinecone.from_existing_index(index_name, embeddings)
+    docsearch = Pinecone.from_existing_index(index_name, embeddings)
+    return docsearch
 
 def get_recommendations(query):
     if query:
         
         try:
             query = query
+            docsearch = get_index()
             docs = docsearch.similarity_search(query, k = 30)
 
             recommendations = []
