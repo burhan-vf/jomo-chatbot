@@ -1,11 +1,11 @@
 from get_recommendations import get_recommendations
 from flask import Flask, request
 import json
+from dotenv import load_dotenv
 
 app = Flask(__name__)
 
-
-@app.route('/jomo-recommendations', methods=['POST'])
+@app.route('/jomo-recommendations', methods=['POST', 'GET'])
 def testing():
     request_json = request.json
     query = request_json['query']
