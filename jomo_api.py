@@ -1,9 +1,11 @@
 from get_recommendations import get_recommendations
 from flask import Flask, request
+from flask_cors import CORS
 import json
 from dotenv import load_dotenv
 
 app = Flask(__name__)
+CORS(app)
 
 @app.route('/jomo-recommendations', methods=['POST', 'GET'])
 def testing():
