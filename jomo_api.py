@@ -5,7 +5,7 @@ import json
 from dotenv import load_dotenv
 
 app = Flask(__name__)
-CORS(app)
+CORS(app, origins=['https://jomofechatbot.virtualforce.io'], methods=['GET', 'POST'])
 
 @app.route('/jomo-recommendations', methods=['POST', 'GET'])
 def testing():
